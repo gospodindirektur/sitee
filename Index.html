@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#07030a">
+<title>Macirmahallesi Radyo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+html{background:#07030a}
+body{margin:0;color:#fff;font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-gradient(circle at 15% 15%,#7d1b39 0,transparent 32%),radial-gradient(circle at 82% 80%,#126d48 0,transparent 30%),#07030a;min-height:100vh;overflow-x:hidden}
+.wrap{max-width:1050px;margin:auto;padding:20px 16px}
+.glass{background:#15101de6;border:1px solid #ffffff26;border-radius:22px;box-shadow:0 14px 36px #0006;backdrop-filter:blur(12px)}
+.datetime-bar{padding:14px 20px;margin-bottom:16px;background:linear-gradient(135deg,rgba(255,45,85,0.14),rgba(0,196,106,0.14));border:1px solid rgba(255,255,255,0.18);border-radius:20px;display:flex;flex-direction:column;gap:10px}
+.dt-header{display:flex;align-items:center;justify-content:center;gap:8px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.1)}
+.dt-header-icon{font-size:16px;filter:drop-shadow(0 0 6px #ffd166)}
+.dt-date{font-size:14px;font-weight:700;color:#f0e6ee;letter-spacing:0.03em;text-transform:capitalize}
+.clocks-grid{display:flex;justify-content:space-around;align-items:center;flex-wrap:wrap;gap:10px}
+.clock-card{display:flex;align-items:center;gap:10px;background:rgba(0,0,0,0.4);padding:6px 14px;border-radius:12px;border:1px solid rgba(255,255,255,0.12);transition:transform .2s ease, border-color .2s ease}
+.clock-card:hover{transform:translateY(-2px);border-color:rgba(255,209,102,0.45)}
+.clock-flag{font-size:20px;line-height:1}
+.clock-info{display:flex;flex-direction:column}
+.clock-country{font-size:11px;font-weight:700;color:#d8c7d4;text-transform:uppercase;letter-spacing:0.04em}
+.clock-val{font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:#ffd166;letter-spacing:0.04em;text-shadow:0 0 8px rgba(255,209,102,0.3)}
+header{text-align:center;padding:10px 0 10px}
+.slogan-box{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:rgba(18, 8, 24, 0.82);border:1px solid rgba(255, 209, 102, 0.35);border-radius:999px;padding:8px 26px;margin:10px auto 14px;box-shadow:0 0 25px rgba(255,45,85,0.22), inset 0 0 15px rgba(255,209,102,0.12);backdrop-filter:blur(10px);transform:rotate(-1deg);transition:all .3s ease}
+.slogan-box:hover{transform:rotate(0deg) scale(1.04);border-color:rgba(255, 209, 102, 0.8);box-shadow:0 0 35px rgba(0,196,106,0.35), inset 0 0 20px rgba(255,45,85,0.25)}
+.slogan-hand{font-family:'Caveat', cursive, sans-serif;font-size:clamp(22px,5.2vw,32px);font-weight:700;letter-spacing:0.02em;background:linear-gradient(90deg,#ff4d6d 0%,#ffd166 50%,#00f084 100%);-webkit-background-clip:text;background-clip:text;color:transparent;display:inline-block;line-height:1.1;text-shadow:0 2px 10px rgba(0,0,0,0.5)}
+.slogan-icon{font-size:18px;filter:drop-shadow(0 0 6px #ffd166);animation:spinPulse 3s infinite ease-in-out}
+@keyframes spinPulse{0%,100%{transform:scale(1) rotate(0deg);opacity:0.8}50%{transform:scale(1.25) rotate(15deg);opacity:1}}
+h1{font-size:clamp(24px,4.5vw,38px);font-weight:800;margin:6px 0 4px;color:#ffffff;letter-spacing:-0.02em}
+header p{color:#d5cbd3;margin:4px 0 14px;font-size:14px}
+.ornament{height:7px;max-width:550px;margin:16px auto;background:repeating-linear-gradient(90deg,#f13256 0 22px,#fff 22px 44px,#13b46a 44px 66px);border-radius:9px}
+.market{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:16px 0}
+.market>div{text-align:center;padding:10px 17px}
+.market b{display:block;color:#ffd36a}
+.market small{color:#c8bbc6}
+.weather{overflow:hidden;margin:16px 0;min-height:47px}
+.ticker{display:flex;width:max-content;animation:move 55s linear infinite}
+.weather:hover .ticker{animation-play-state:paused}
+.w{padding:12px 19px;white-space:nowrap;border-right:1px solid #ffffff26;color:#ffd36a}
+@keyframes move{to{transform:translateX(-50%)}}
+.now{text-align:center;padding:27px 15px;margin-bottom:13px}
+.now small{color:#cebfc8;letter-spacing:.18em;text-transform:uppercase;font-size:12px}
+.now h2{font-size:clamp(28px,5vw,47px);margin:10px;font-weight:700}
+.now p{color:#d5cbd3;margin:0}
+.volume{text-align:center;padding:14px;margin-bottom:13px}
+.volume[hidden]{display:none}
+.volume label{display:inline-flex;align-items:center;gap:10px}
+.volume input{width:min(50vw,250px);accent-color:#ef3155}
+.controls,.tabs{display:flex;flex-wrap:wrap;justify-content:center;gap:9px;margin:14px 0}
+.btn{color:#fff;background:#ffffff12;border:1px solid #ffffff38;border-radius:24px;padding:10px 16px;cursor:pointer;font:inherit;font-weight:600;transition:.2s}
+.btn.active,.btn:hover{background:linear-gradient(110deg,#c92551,#078b54)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:13px}
+.card{display:flex;align-items:center;gap:11px;padding:17px;cursor:pointer;min-width:0;position:relative;overflow:hidden;transition:.2s}
+.card:after{content:'';position:absolute;bottom:0;left:0;right:0;height:5px;background:repeating-linear-gradient(90deg,#eb2e51 0 18px,#fff 18px 36px,#0aa763 36px 54px)}
+.card.selected{border-color:#ff4569;box-shadow:0 0 20px #f3447044}
+.icon{width:56px;height:56px;flex:none;border-radius:14px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);display:grid;place-items:center;font-size:26px;overflow:hidden;padding:4px}
+.info{flex:1;min-width:0}
+.info strong{display:block;font-size:16px;font-weight:700}
+.info small{color:#ccc0ca}
+.fav,.play{border:0;cursor:pointer;font-size:21px}
+.fav{background:none;color:#bbb}
+.fav.on{color:#ffd36a}
+.play{background:linear-gradient(135deg,#ef3155,#0eae6d);color:#fff;width:42px;height:42px;border-radius:50%;flex:none}
+.like-section{margin-top:28px;padding:24px 20px;background:rgba(18, 8, 24, 0.88);border:1px solid rgba(255,255,255,0.18);border-radius:24px;text-align:center;box-shadow:0 12px 36px rgba(0,0,0,0.6);position:relative;overflow:hidden}
+.like-title{font-size:18px;font-weight:700;margin:0 0 6px;color:#fff}
+.like-sub{font-size:13px;color:#d5cbd3;margin:0 0 16px}
+.like-btn-wrap{display:inline-flex;align-items:center;gap:14px;background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.16);padding:10px 24px;border-radius:999px;box-shadow:0 8px 24px rgba(0,0,0,0.4)}
+.like-btn{background:linear-gradient(135deg,#ff2d55,#ff5e7e);color:#fff;border:0;width:54px;height:54px;border-radius:50%;font-size:26px;cursor:pointer;display:grid;place-items:center;box-shadow:0 0 20px rgba(255,45,85,0.6);transition:transform .2s ease, box-shadow .2s ease;user-select:none}
+.like-btn:hover{transform:scale(1.12);box-shadow:0 0 30px rgba(255,45,85,0.85)}
+.like-btn:active{transform:scale(0.92)}
+.like-btn.liked{background:linear-gradient(135deg,#00c46a,#00f084);box-shadow:0 0 25px rgba(0,240,132,0.7);animation:heartPop .4s ease}
+.like-counter{font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:800;color:#ffd166;letter-spacing:0.04em;text-shadow:0 0 10px rgba(255,209,102,0.4)}
+.like-counter-label{display:block;font-size:11px;font-family:'Plus Jakarta Sans',sans-serif;color:#d8c7d4;text-transform:uppercase;letter-spacing:0.08em;font-weight:600;margin-top:2px}
+.like-feedback{font-size:12px;color:#00f084;margin-top:10px;min-height:18px;font-weight:600;transition:opacity .3s ease}
+@keyframes heartPop{0%{transform:scale(1)}50%{transform:scale(1.35)}100%{transform:scale(1)}}
+footer{text-align:center;color:#b4a9b2;margin:26px 0;font-size:12px}
+#sleepModal{position:fixed;inset:0;background:#000b;display:none;place-items:center;z-index:5}
+#sleepModal.open{display:grid}
+.dialog{width:min(94vw,400px);padding:25px;text-align:center}
+@media(prefers-reduced-motion:reduce){.ticker{animation:none}}
+@media(max-width:620px){.clocks-grid{justify-content:center}.clock-card{flex:1 1 130px;justify-content:center}}
+@media(max-width:420px){.wrap{padding:14px 10px}.card{padding:13px}.market>div{padding:9px 12px}.slogan-box{padding:6px 18px;gap:6px}.like-btn-wrap{padding:8px 18px;gap:10px}.like-counter{font-size:20px}}
+</style>
+</head>
+<body>
+
+<main class="wrap">
+
+<!-- Canlı Tarih & 3 Ülke Saat Barı -->
+<div class="datetime-bar glass">
+  <div class="dt-header">
+    <span class="dt-header-icon">📅</span>
+    <span id="liveDate" class="dt-date">Yükleniyor…</span>
+  </div>
+  <div class="clocks-grid">
+    <div class="clock-card">
+      <span class="clock-flag">🇹🇷</span>
+      <div class="clock-info">
+        <span class="clock-country">Türkiye</span>
+        <span id="timeTR" class="clock-val">00:00:00</span>
+      </div>
+    </div>
+    <div class="clock-card">
+      <span class="clock-flag">🇧🇬</span>
+      <div class="clock-info">
+        <span class="clock-country">Bulgaristan</span>
+        <span id="timeBG" class="clock-val">00:00:00</span>
+      </div>
+    </div>
+    <div class="clock-card">
+      <span class="clock-flag">🇩🇪</span>
+      <div class="clock-info">
+        <span class="clock-country">Almanya</span>
+        <span id="timeDE" class="clock-val">00:00:00</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<header>
+<div class="slogan-box">
+  <span class="slogan-icon">📍</span>
+  <span class="slogan-hand">Farklı Konumlar, Aynı Mahalle…</span>
+  <span class="slogan-icon">📻</span>
+</div>
+<h1>Macirmahallesi Radyo</h1>
+<p>Bulgaristan, Türkiye ve Almanya’dan canlı radyolar</p>
+<div class="ornament"></div>
+</header>
+
+<section class="market">
+<div class="glass"><b id="usd">—</b><small>USD/TRY</small></div>
+<div class="glass"><b id="eur">—</b><small>EUR/TRY</small></div>
+<div class="glass"><b id="gold">—</b><small>Gram altın (TRY)</small></div>
+</section>
+
+<section class="glass weather" aria-label="Şehir hava durumları">
+<div id="ticker" class="ticker"></div>
+</section>
+
+<section class="glass now">
+<small>Şu an çalan radyo</small>
+<h2 id="now">Bir radyo seçin</h2>
+<p id="status" role="status">Hazır</p>
+</section>
+
+<section id="volumeRow" class="glass volume" hidden>
+<label>Ses seviyesi <input id="volume" type="range" min="0" max="100" value="85"></label>
+</section>
+
+<div class="controls">
+<button class="btn" id="pause">▶ Oynat</button>
+<button class="btn" id="random">🎲 Rastgele radyo</button>
+<button class="btn" id="sleep">⏰ Uyku zamanlayıcısı</button>
+<span class="btn" id="sleepStatus">Uyku: kapalı</span>
+<span class="btn" id="siteTime">Sitede: 0 sn</span>
+</div>
+
+<nav id="tabs" class="tabs" aria-label="Ülke filtreleri"></nav>
+<section id="grid" class="grid" aria-label="Radyolar"></section>
+<audio id="audio" preload="none"></audio>
+
+<!-- Beğeni Bölümü -->
+<section class="like-section glass">
+  <h3 class="like-title">❤️ Macır Mahallesi'ni Beğendiniz mi?</h3>
+  <p class="like-sub">Mahalleye destek olmak için kalbe dokunun, her beğeni sayacı artırır!</p>
+  
+  <div class="like-btn-wrap">
+    <button id="likeBtn" class="like-btn" aria-label="Siteyi Beğen">❤️</button>
+    <div>
+      <div id="likeCount" class="like-counter">1,248</div>
+      <span class="like-counter-label">Toplam Mahalle Beğenisi</span>
+    </div>
+  </div>
+  <div id="likeFeedback" class="like-feedback"></div>
+</section>
+
+<footer>Canlı yayınlar ilgili radyo istasyonlarına aittir.</footer>
+</main>
+
+<div id="sleepModal">
+<div class="glass dialog">
+<h3>Uyku zamanlayıcısı</h3>
+<div class="controls">
+<button class="btn" data-min="15">15 dk</button>
+<button class="btn" data-min="30">30 dk</button>
+<button class="btn" data-min="60">60 dk</button>
+<button class="btn" data-min="0">Kapat</button>
+</div>
+<button class="btn" id="closeSleep">Geri</button>
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.20/dist/hls.min.js"></script>
+<script>
+// Beğeni ve Sayaç Sistemi
+const BASE_LIKES = 1248;
+let currentLikes = BASE_LIKES;
+let userLiked = false;
+
+try {
+  const savedLikes = localStorage.getItem('macir_likes_count');
+  if (savedLikes) currentLikes = parseInt(savedLikes, 10);
+  userLiked = localStorage.getItem('macir_user_liked') === 'true';
+} catch(e){}
+
+const likeBtn = document.getElementById('likeBtn');
+const likeCountEl = document.getElementById('likeCount');
+const likeFeedback = document.getElementById('likeFeedback');
+
+function updateLikeDisplay() {
+  if (likeCountEl) likeCountEl.textContent = Number(currentLikes).toLocaleString('tr-TR');
+  if (likeBtn) {
+    if (userLiked) {
+      likeBtn.classList.add('liked');
+      likeBtn.textContent = '💖';
+    } else {
+      likeBtn.classList.remove('liked');
+      likeBtn.textContent = '❤️';
+    }
+  }
+}
+
+if (likeBtn) {
+  likeBtn.addEventListener('click', () => {
+    if (!userLiked) {
+      currentLikes++;
+      userLiked = true;
+      if (likeFeedback) likeFeedback.textContent = '✨ Teşekkürler! Mahalleye desteğiniz eklendi.';
+    } else {
+      currentLikes = Math.max(BASE_LIKES, currentLikes - 1);
+      userLiked = false;
+      if (likeFeedback) likeFeedback.textContent = 'Beğeni geri alındı.';
+    }
+    
+    try {
+      localStorage.setItem('macir_likes_count', currentLikes);
+      localStorage.setItem('macir_user_liked', userLiked);
+    } catch(e){}
+    
+    updateLikeDisplay();
+    setTimeout(() => { if (likeFeedback) likeFeedback.textContent = ''; }, 3500);
+  });
+}
+updateLikeDisplay();
+
+// Canlı Tarih & 3 Ülke Saat Fonksiyonu
+function updateDateTime() {
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric', weekday: 'long' });
+  const dEl = document.getElementById('liveDate');
+  if (dEl) dEl.textContent = dateStr;
+  
+  const formatTime = tz => new Intl.DateTimeFormat('tr-TR', {
+    timeZone: tz,
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+  }).format(now);
+  
+  const trEl = document.getElementById('timeTR');
+  const bgEl = document.getElementById('timeBG');
+  const deEl = document.getElementById('timeDE');
+  
+  if (trEl) trEl.textContent = formatTime('Europe/Istanbul');
+  if (bgEl) bgEl.textContent = formatTime('Europe/Sofia');
+  if (deEl) deEl.textContent = formatTime('Europe/Berlin');
+}
+updateDateTime();
+setInterval(updateDateTime, 1000);
+
+const stations=[
+  {name:'Radio Veselina',country:'BG',url:'https://bss1.neterra.tv/veselina/veselina.m3u8'},
+  {name:'Veselina Retro',country:'BG',url:'https://nova-radio.neterra.tv/veselinaretro'},
+  {name:'Radio Folk BG',country:'BG',url:'http://listen.folkbg.net:8002/folkbg'},
+  {name:'Radio Veronika',country:'BG',url:'https://stream.rcast.net/204571'},
+  {name:'Kafa Radyo',country:'TR',query:'Kafa Radyo'},
+  {name:'PowerTürk',country:'TR',query:'Power Türk'},
+  {name:'Metropol FM Almanya',country:'DE',url:'https://streams.metropolfm.de/METROPOLFMRheinMain/stream.aac'},
+  {name:'Pal FM',country:'TR',query:'Pal FM'},
+  {name:'Best FM',country:'TR',query:'Best FM',website:'https://www.bestfm.com.tr/'}
+];
+
+const cities=[['Kırcaali',41.6333,25.3667],['Razgrad',43.5167,26.5167],['Şumnu',43.2667,26.9333],['Silistre',44.1167,27.2667],['Hasköy',41.9333,25.55],['Burgaz',42.5,27.4667],['İstanbul',41.0082,28.9784],['Bursa',40.1885,29.061],['Edirne',41.6761,26.5557],['Kırklareli',41.7333,27.2167],['Ankara',39.9334,32.8597],['İzmir',38.4237,27.1428]];
+const $=id=>document.getElementById(id),audio=$('audio');
+let current=-1,filter='ALL',hls=null,serial=0,sleepTimer=null,sleepEnd=0;
+let favs=[];try{favs=JSON.parse(localStorage.getItem('favs')||'[]')}catch(e){}
+if(!Array.isArray(favs))favs=[];
+let siteSeconds=0;try{siteSeconds=Number(localStorage.getItem('siteSeconds'))||0}catch(e){}
+
+function country(c){return c==='BG'?'Bulgaristan':c==='DE'?'Almanya':'Türkiye'}
+function fmt(sec){sec=Math.floor(sec);const h=Math.floor(sec/3600),m=Math.floor(sec%3600/60),s=sec%60;return (h?h+' sa ':'')+(m?m+' dk ':'')+s+' sn'}
+
+// MediaSession API: Ekran kapalıyken kontrol
+function updateMediaSession(stationName) {
+  if ('mediaSession' in navigator) {
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: stationName,
+      artist: 'Macır Mahallesi Radyo',
+      album: 'Canlı Yayın'
+    });
+    
+    navigator.mediaSession.setActionHandler('play', () => { audio.play().catch(()=>{}); });
+    navigator.mediaSession.setActionHandler('pause', () => { audio.pause(); });
+    navigator.mediaSession.setActionHandler('previoustrack', () => {
+      let prev = (current - 1 + stations.length) % stations.length;
+      select(prev);
+    });
+    navigator.mediaSession.setActionHandler('nexttrack', () => {
+      let next = (current + 1) % stations.length;
+      select(next);
+    });
+  }
+}
+
+function render(){
+  const cats=[['ALL','Tümü'],['BG','Bulgaristan'],['TR','Türkiye'],['DE','Almanya'],['FAV','⭐ Favoriler']];
+  $('tabs').replaceChildren(...cats.map(([key,name])=>{
+    const b=document.createElement('button');b.className='btn'+(filter===key?' active':'');b.textContent=name;
+    b.onclick=()=>{filter=key;render()};return b;
+  }));
+  $('grid').replaceChildren(...stations.map((s,i)=>({s,i})).filter(({s})=>filter==='ALL'||(filter==='FAV'?favs.includes(s.name):s.country===filter)).map(({s,i})=>{
+    const card=document.createElement('article');card.className='glass card'+(i===current?' selected':'');
+    const icon=document.createElement('div');icon.className='icon';
+    icon.textContent='📻';
+    const info=document.createElement('div');info.className='info';
+    const title=document.createElement('strong');title.textContent=s.name;
+    const sub=document.createElement('small');sub.textContent=country(s.country)+' • Canlı yayın';
+    info.append(title,sub);
+    const fav=document.createElement('button');fav.className='fav'+(favs.includes(s.name)?' on':'');fav.textContent='★';
+    fav.setAttribute('aria-label',s.name+' favori');
+    fav.onclick=e=>{e.stopPropagation();favs=favs.includes(s.name)?favs.filter(n=>n!==s.name):[...favs,s.name];try{localStorage.setItem('favs',JSON.stringify(favs))}catch(err){}render()};
+    const play=document.createElement('button');play.className='play';play.textContent=i===current&&!audio.paused?'⏸':'▶';
+    play.setAttribute('aria-label',s.name+' oynat veya duraklat');
+    play.onclick=e=>{e.stopPropagation();select(i)};
+    card.onclick=()=>select(i);card.append(icon,info,fav,play);return card;
+  }));
+}
+
+async function lookup(s){
+  if(s.url)return s.url;
+  for(const server of ['de1','nl1']){
+    try{
+      const ctrl=new AbortController();const timer=setTimeout(()=>ctrl.abort(),4500);
+      const r=await fetch('https://'+server+'.api.radio-browser.info/json/stations/byname/'+encodeURIComponent(s.query)+'?limit=40',{signal:ctrl.signal});
+      clearTimeout(timer);if(!r.ok)continue;
+      const list=await r.json();
+      const matches=list.filter(x=>x.countrycode===s.country&&x.url_resolved&&x.lastcheckok===1&&x.url_resolved.startsWith('https:'));
+      const exact=matches.find(x=>x.name.trim().toLocaleLowerCase()===s.name.toLocaleLowerCase());if(exact)return exact.url_resolved;
+      const normal=matches.find(x=>x.name.toLocaleLowerCase().includes(s.name.toLocaleLowerCase()));if(normal)return normal.url_resolved;
+    }catch(e){}
+  }
+  return null;
+}
+
+function stop(){audio.pause();if(hls){hls.destroy();hls=null}audio.removeAttribute('src');audio.load()}
+function fail(token){
+  if(token!==serial)return;$('status').textContent='Yayın açılamadı';
+  const s=stations[current];
+  if(s.website){const a=document.createElement('a');a.href=s.website;a.target='_blank';a.rel='noopener noreferrer';a.textContent='Resmî sitede dinle';$('status').append(' • ',a)}
+}
+
+function playUrl(url,token){
+  if(/.m3u8(?:[?#]|$)/i.test(url)&&window.Hls&&Hls.isSupported()){
+    hls=new Hls();hls.loadSource(url);hls.attachMedia(audio);
+    hls.on(Hls.Events.MANIFEST_PARSED,()=>{
+      if(token===serial){
+        audio.play().then(()=>updateMediaSession(stations[current].name)).catch(()=>fail(token));
+      }
+    });
+    hls.on(Hls.Events.ERROR,(e,d)=>{if(d.fatal)fail(token)});
+  }else{
+    audio.src=url;
+    audio.play().then(()=>updateMediaSession(stations[current].name)).catch(()=>fail(token));
+  }
+}
+
+async function select(i){
+  if(i===current){
+    if(!audio.paused){ audio.pause();return; }
+    if(audio.currentSrc||hls){
+      audio.play().then(()=>updateMediaSession(stations[current].name)).catch(()=>fail(serial));
+      return;
+    }
+  }
+  const token=++serial;stop();current=i;$('now').textContent=stations[i].name;$('status').textContent='Bağlanıyor…';
+  $('volumeRow').hidden=false;try{localStorage.setItem('last',stations[i].name)}catch(e){}
+  render();const url=await lookup(stations[i]);if(token!==serial)return;
+  if(!url){$('status').textContent='Yayın adresi bulunamadı';if(stations[i].website){const a=document.createElement('a');a.href=stations[i].website;a.target='_blank';a.rel='noopener noreferrer';a.textContent='Resmî sitede dinle';$('status').append(' • ',a)}return}
+  playUrl(url,token);
+}
+
+$('pause').onclick=()=>select(current<0?0:current);
+$('random').onclick=()=>select(Math.floor(Math.random()*stations.length));
+$('volume').oninput=e=>{audio.volume=Number(e.target.value)/100};audio.volume=.85;
+audio.onplaying=()=>{$('status').textContent='Canlı yayında';$('pause').textContent='⏸ Duraklat';render()};
+audio.onpause=()=>{$('pause').textContent='▶ Oynat';render()};
+audio.onerror=()=>fail(serial);
+
+$('sleep').onclick=()=>$('sleepModal').classList.add('open');
+$('closeSleep').onclick=()=>$('sleepModal').classList.remove('open');
+document.querySelectorAll('[data-min]').forEach(b=>b.onclick=()=>{
+  clearTimeout(sleepTimer);let m=Number(b.dataset.min);sleepEnd=m?Date.now()+m*60000:0;updateSleep();
+  if(m)sleepTimer=setTimeout(()=>{audio.pause();sleepEnd=0;updateSleep()},m*60000);
+  $('sleepModal').classList.remove('open');
+});
+function updateSleep(){$('sleepStatus').textContent=sleepEnd?'Uyku: '+Math.max(1,Math.ceil((sleepEnd-Date.now())/60000))+' dk':'Uyku: kapalı'}
+setInterval(updateSleep,30000);
+
+setInterval(()=>{siteSeconds++;$('siteTime').textContent='Sitede: '+fmt(siteSeconds);try{localStorage.setItem('siteSeconds',siteSeconds)}catch(e){}},1000);
+$('siteTime').textContent='Sitede: '+fmt(siteSeconds);
+
+const icons={0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌦️',53:'🌦️',55:'🌦️',61:'🌧️',63:'🌧️',65:'🌧️',71:'🌨️',73:'🌨️',75:'🌨️',80:'🌦️',81:'🌦️',82:'🌧️',95:'⛈️'};
+async function weather(){
+  const data=await Promise.all(cities.map(async([n,lat,lon])=>{
+    try{
+      const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon+'&current=temperature_2m,weather_code&timezone=auto');
+      const j=await r.json();return n+' '+(icons[j.current.weather_code]||'🌡️')+' '+Math.round(j.current.temperature_2m)+'°C';
+    }catch(e){return n+' —';}
+  }));
+  $('ticker').replaceChildren(...[...data,...data].map(text=>{const e=document.createElement('div');e.className='w';e.textContent=text;return e;}));
+}
+
+async function rates(){
+  try{
+    const d=await(await fetch('https://open.er-api.com/v6/latest/USD')).json();const usd=d.rates.TRY;
+    $('usd').textContent=usd.toFixed(2)+' ₺';$('eur').textContent=(usd/d.rates.EUR).toFixed(2)+' ₺';
+    try{const g=await(await fetch('https://api.gold-api.com/price/XAU')).json();if(g.price)$('gold').textContent=(g.price/31.1035*usd).toFixed(0)+' ₺'}catch(e){}
+  }catch(e){}
+}
+
+render();weather();rates();setInterval(weather,600000);setInterval(rates,300000);
+try{
+  const i=stations.findIndex(s=>s.name===localStorage.getItem('last'));
+  if(i>=0){current=i;$('now').textContent=stations[i].name;$('status').textContent='Oynatmak için dokunun';$('volumeRow').hidden=false;render();}
+}catch(e){}
+</script>
+</body>
+</html>
